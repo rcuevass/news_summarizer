@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h6>Provide URL link of a news article to extract the news data summary:</h6>
+
+{% from "_formhelpers.html" import render_field %}
+<form method="post" action=''>
+
+    <dl>
+        <p>
+            {{ render_field(form.search) }}
+    </dl>
+    </p><input name="urllink" class="btn btn-primary btn-lg" type=submit value="Summarize!">
+</form>
+<br>
+
+{% for error in errors %}
+<h3 class="errormsg">{{ error }}</h3>
+{% endfor %}
+
+{% endblock %}
