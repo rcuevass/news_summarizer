@@ -3,4 +3,3 @@ env4/
 .idea
 logs/logging.py.log
 logs/logging.py.log.*
-credentials/news_api_credential.ini
