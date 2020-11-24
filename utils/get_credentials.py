@@ -19,6 +19,6 @@ def get_api_news_credential(ini_file_credentials: str = 'news_api_credential.ini
     # get api key
     config = configparser.ConfigParser()
     config.read(full_path)
-    apiNews_string = config['NEWSAPI']['api_key']
+    apiNews_string = config['NEWSAPI']['api_key_aux']
 
     return apiNews_string

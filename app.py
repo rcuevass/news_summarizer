@@ -8,6 +8,7 @@ from newsapi import NewsApiClient
 from datetime import date, timedelta
 
 from forms import UrlSearchForm
+import sys
 
 # import nltk
 # nltk.data.path.append('./nltk_data/')
@@ -24,22 +25,26 @@ past_date = todays_date - timedelta(3)
 
 log = get_log_object()
 
+# https://www.bbc.com/news/technology-55044568
+
 
 @app.route('/', methods=["GET", "POST"])
 def index():
     errors = []
     urlsearch = UrlSearchForm(request.form)
-    log.info('URL zero=%s', urlsearch)
+    log.info('URL zero=%s', urlsearch.data['search'])
 
     if request.method == "POST":
         
         try:
-            return search_results(urlsearch)
+            results_from_req = search_results(urlsearch)
+            return results_from_req
 
         except:
             errors.append(
                 "Unable to process request. This event has been logged and it will be tackled in next release"
-            )       
+            )
+            log.info('It was not possible to process this URL=%s', urlsearch.data['search'])
     return render_template("index.html", form = urlsearch, errors = errors)
 
 
@@ -48,6 +53,7 @@ def search_results(input_):
     urlsearch_x = UrlSearchForm(request.form)
     search_string = urlsearch_x.data['search']
     log.info('String to be processed=%s', search_string)
+    log.info('First four characters of the request=%s', search_string[:4])
 
     if search_string[:4] == 'http':
         log.info('URL detected')
@@ -56,15 +62,23 @@ def search_results(input_):
         log.info('URL to be processed=%s', search_url)
 
     else:
-        all_articles = newsapi_x.get_everything(q=search_string,
-                                                sources='bbc-news,abc-news,the-wall-street-journal,the-verge',
-                                                domains='bbc.co.uk,bloomberg.com,theverge.com',
-                                                from_param=past_date,
-                                                to=todays_date,
-                                                language='en',
-                                                sort_by='popularity',
-                                                page=1)
-        search_url = all_articles['articles'][0]['url']
+        try:
+            all_articles = newsapi_x.get_everything(q=search_string,
+                                                    sources='bbc-news,abc-news,the-wall-street-journal,the-verge',
+                                                    domains='bbc.co.uk,bloomberg.com,theverge.com',
+                                                    from_param=past_date,
+                                                    to=todays_date,
+                                                    language='en',
+                                                    sort_by='popularity',
+                                                    page=1)
+            search_url = all_articles['articles'][0]['url']
+            log.info('URL from NewsAPI=%s', search_url)
+
+        except:
+            log.info('It is likely you have made too many requests recently. Developer accounts are limited to 100')
+            log.info('requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid')
+            log.info('plan if you need more requests.')
+            search_url = None
 
     log.info('search URL=%s', search_url)
 
@@ -87,11 +101,21 @@ def search_results(input_):
     log.info('Article data-ed')
     title = article.title
     log.info('Article title=%s', title)
+
     date = article.publish_date
-    log.info('Article date=%s', str(date))
-    published_date = date.strftime("%d %B %Y")
-    log.info('Published date=%s',published_date)
-    author = article.authors[0]
+    log.info('Article date=%s', bool(date))
+    if not bool(date):
+        published_date = 'Not specified'
+        log.info('Published date was originally None - it has been replaced to Not Specified')
+    else:
+        published_date = date.strftime("%d %B %Y")
+
+    log.info('Published date=%s', published_date)
+
+    try:
+        author = article.authors[0]
+    except:
+        author = 'Not specified'
     log.info('author=%s', author)
 
     keyword = article.keywords
