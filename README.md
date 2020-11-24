@@ -31,4 +31,29 @@ Lastly <strong>newspaper3k</strong> can also run its simple natural language pro
 Keywords(WorldCloud) image and the summary of the news text will be displayed as the second part
 of the result page.
 
+## For Deployment on Heroku
+
+The following steps explain how to do deployment of this app on Heroku:
+
+1. In case you do not have a `requirements.txt` file, generate one by typing in the following command in your
+conda/virtual environment: `pip freeze -l > requirements.txt`
+
+2. You may want to ensure you have the package `gunicorn==19.9.0` in the list of your requirements.
+
+3. Make sure to include `runtime.txt` to specify the python version used for the deployment with Heroku.
+
+4. Also be sure to include `Procfile` which contains the instructions for Heroku at the time the app will be initiated.
+
+5. Get the [**Heroku CLI**](https://devcenter.heroku.com/articles/heroku-cli) on your local
+
+6. On your local type in `heroku create name-of-app` (in this case we have chosen cib-news-summary to be the name of the app to be created)
+
+7. Upon completion you should be able to see the name of the app in your heroku personal account
+
+   ![app_created](images/heroku-app-created.PNG)
+    
+   nothing will be displayed in the app as we have not pushed any code to it yet.
+
+8. In order to push your local code to heroku remote, type in `git push heroku add-model:master`. Master here is the
+remote (Heroku) master. Upon completion you should be able to see your app working.
 
