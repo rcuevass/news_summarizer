@@ -7,20 +7,12 @@ from utils.get_credentials import get_api_news_credential
 from newsapi import NewsApiClient
 from datetime import date, timedelta
 
-import os
-import requests
 from forms import UrlSearchForm
 
 # import nltk
 # nltk.data.path.append('./nltk_data/')
 
 from newspaper import Article
-from wordcloud import WordCloud
-
-import base64
-import io
-import datetime
-
 
 app = Flask(__name__)
 googlenews = GoogleNews()
@@ -43,9 +35,10 @@ def index():
         
         try:
             return search_results(urlsearch)
+
         except:
             errors.append(
-                "Unable to process URL.  Please enter a valid URL for news article."
+                "Unable to process request. This event has been logged and it will be tackled in next release"
             )       
     return render_template("index.html", form = urlsearch, errors = errors)
 
@@ -101,9 +94,6 @@ def search_results(input_):
     author = article.authors[0]
     log.info('author=%s', author)
 
-
-    # WordCloud disabled for now
-    # cloud = get_wordcloud(data)
     keyword = article.keywords
 
     summary = article.summary
