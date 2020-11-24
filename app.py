@@ -13,15 +13,9 @@ import base64
 import io
 import datetime
 
-def get_wordcloud(text):
-    pil_img = WordCloud().generate(text=text).to_image()
-    img = io.BytesIO()
-    pil_img.save(img, "PNG")
-    img.seek(0)
-    img_b64 = base64.b64encode(img.getvalue()).decode()
-    return img_b64
 
 app = Flask(__name__)
+
 
 @app.route('/', methods = ["GET", "POST"])
 def index():
@@ -38,7 +32,7 @@ def index():
             )       
     return render_template("index.html", form = urlsearch, errors = errors)
 
-# @app.route("/results", methods = ["GET", "POST"])
+
 def search_results(urlsearch):
     urlsearch = UrlSearchForm(request.form)
     search_string = urlsearch.data['search']

@@ -54,6 +54,6 @@ conda/virtual environment: `pip freeze -l > requirements.txt`
     
    nothing will be displayed in the app as we have not pushed any code to it yet.
 
-8. In order to push your local code to heroku remote, type in `git push heroku add-model:master`. Master here is the
-remote (Heroku) master. Upon completion you should be able to see your app working.
+8. In order to push your local code to heroku remote, type in `git push heroku test:master`. Master here is the
+remote (Heroku) master and test is your current local branch. Upon completion you should be able to see your app working.
 
