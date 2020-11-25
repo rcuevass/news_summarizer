@@ -1,3 +1,5 @@
 env4/
 .vscode
 .idea
+logs/logging.py.log
+logs/logging.py.log.*
