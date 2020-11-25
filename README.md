@@ -54,8 +54,20 @@ conda/virtual environment: `pip freeze -l > requirements.txt`
     
    nothing will be displayed in the app as we have not pushed any code to it yet.
 
-8. In order to push your local code to heroku remote, type in `git push heroku test:master`. Master here is the
-remote (Heroku) master and test is your current local branch. Upon completion you should be able to see your app working.
+8. In order to push your local code to heroku remote, type in `git push heroku test:master`. Here master is the
+remote (Heroku) branch and test is your current local branch. Upon completion you should be able to see your app
+working.
+
+9. In case you want to create multiple versions of the app in Heroku, you can do so by doing the following:
+
+     - Create a new app in Heroku as you did before (step 6): `heroku create app-name-version`
+     
+     - Create a new remote branch in Heroku: `git remote add app-version-name GIT_URL`. GIT_URL with the Git URL that you
+     can find in the settings page of my-app-prod in heroku
+     
+     - Deploy model: `git push app-version-name test:master`. This is just like step 8 above.
+     
+     - _Extra_. This [stackoverflow thread](https://stackoverflow.com/questions/18264621/how-do-i-push-different-branches-to-different-heroku-apps) discusses this situation in depth.
 
 ## Generals
 
