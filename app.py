@@ -86,6 +86,7 @@ def search_results(input_):
                 log.info('URL from NewsAPI=%s', search_url)
                 # replace search_url with search_string
                 search_string = search_url
+                
             else:
                 log.info('Not relevant result were found from the query %s= ', search_string)
 
