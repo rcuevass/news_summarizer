@@ -55,6 +55,9 @@ def search_results(input_):
     log.info('String to be processed=%s', search_string)
     log.info('First four characters of the request=%s', search_string[:4])
 
+    # initialize value for search_url
+    search_url = None
+
     if search_string[:4] == 'http':
         log.info('URL detected')
         urlsearch_x = UrlSearchForm(request.form)
@@ -64,21 +67,30 @@ def search_results(input_):
     else:
         try:
             all_articles = newsapi_x.get_everything(q=search_string,
-                                                    sources='bbc-news,abc-news,the-wall-street-journal,the-verge',
-                                                    domains='bbc.co.uk,bloomberg.com,theverge.com',
+                                                    sources='bbc-news,the-verge,abc-news,al-jazeera-english,'
+                                                            'ars-technica, associated-press,axios,bloomberg,'
+                                                            'business-insider,cbc-news,cnn,crypto-coins-news,'
+                                                            'financial-post,google-news,google-news-ca,politico,'
+                                                            'reuters,the-globe-and-mail,the-wall-street-journal,'
+                                                            'the-washington-post,the-washington-times,wired',
+                                                    domains='bbc.co.uk,theverge.com,bloomberg.com,nytimes.com,'
+                                                            'bnnbloomberg.ca',
                                                     from_param=past_date,
                                                     to=todays_date,
                                                     language='en',
                                                     sort_by='popularity',
                                                     page=1)
-            search_url = all_articles['articles'][0]['url']
-            log.info('URL from NewsAPI=%s', search_url)
+            if len(all_articles['articles']) > 0:
+                search_url = all_articles['articles'][0]['url']
+                log.info('Query requested=%s', search_string)
+                log.info('URL from NewsAPI=%s', search_url)
+            else:
+                log.info('Not relevant result were found from the query %s= ', search_string)
 
         except:
             log.info('It is likely you have made too many requests recently. Developer accounts are limited to 100')
             log.info('requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid')
             log.info('plan if you need more requests.')
-            search_url = None
 
     log.info('search URL=%s', search_url)
 

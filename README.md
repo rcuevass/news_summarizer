@@ -57,3 +57,10 @@ conda/virtual environment: `pip freeze -l > requirements.txt`
 8. In order to push your local code to heroku remote, type in `git push heroku test:master`. Master here is the
 remote (Heroku) master and test is your current local branch. Upon completion you should be able to see your app working.
 
+## Generals
+
+Here are some links to test the app against:
+
+- https://techcrunch.com/2020/11/17/amazon-launches-amazon-pharmacy-its-delivery-service-for-prescription-medications/
+
+- https://www.bbc.com/news/technology-55044568
