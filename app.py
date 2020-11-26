@@ -21,7 +21,7 @@ api_key_val = get_api_news_credential()
 newsapi_val = NewsApiClient(api_key=api_key_val)
 # get todays's date and, from it, get the date corresponding to three days prior to it
 todays_date = date.today()
-past_date = todays_date - timedelta(3)
+past_date = todays_date - timedelta(1)
 
 # instantiate logging object
 log = get_log_object()
@@ -71,13 +71,13 @@ def search_results(input_):
         log.info('An open string has been provided in the search bar...')
         try:
             all_articles = newsapi_val.get_everything(q=search_string,
-                                                      sources='bbc-news,the-verge,abc-news,al-jazeera-english,'
-                                                              'ars-technica, associated-press,axios,bloomberg,'
-                                                              'business-insider,cbc-news,cnn,crypto-coins-news,'
-                                                              'financial-post,google-news,google-news-ca,politico,'
-                                                              'reuters,the-globe-and-mail,the-wall-street-journal,'
-                                                              'the-washington-post,the-washington-times,wired',
-                                                      domains='bbc.co.uk,theverge.com,bloomberg.com,nytimes.com,'
+                                                      sources='bbc-news, the-verge, abc-news, al-jazeera-english,'
+                                                              'ars-technica, associated-press, axios,bloomberg,'
+                                                              'business-insider, cbc-news, cnn, crypto-coins-news,'
+                                                              'financial-post, google-news, google-news-ca, politico,'
+                                                              'reuters, the-globe-and-mail, the-wall-street-journal,'
+                                                              'the-washington-post, the-washington-times, wired',
+                                                      domains='bbc.co.uk, theverge.com, bloomberg.com, nytimes.com,'
                                                               'bnnbloomberg.ca',
                                                       from_param=past_date,
                                                       to=todays_date,
@@ -160,7 +160,7 @@ def search_results(input_):
 
     # render results
     return render_template("results.html", search_string=search_string, title=article_title,
-                           published_date=published_date,author=author, image=image_url, keyword=keywords,
+                           published_date=published_date, author=author, image=image_url, keyword=keywords,
                            summary=summary)
 
 
