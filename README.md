@@ -69,6 +69,7 @@ working.
      can find in the settings page of my-app-prod in heroku
      
      - Deploy model: `git push app-version-name test:master`. This is just like step 8 above.
+     E.g: If `dev` is current local branch ->  `git push alpha-heroku dev:master`
      
      - _Extra_. This [stackoverflow thread](https://stackoverflow.com/questions/18264621/how-do-i-push-different-branches-to-different-heroku-apps) discusses this situation in depth.
 
