@@ -6,3 +6,4 @@ logs/logging.py.log.*
 experiment.py
 experiment_2FA.py
 newsAPI-experiment.py
+RESOURCES.md
