@@ -82,7 +82,7 @@ def search_results(input_):
                                                       from_param=past_date,
                                                       to=todays_date,
                                                       language='en',
-                                                      sort_by='popularity',
+                                                      sort_by='relevancy',
                                                       page=1)
             log.info('Articles have been obtained by means of newsAPI')
 
