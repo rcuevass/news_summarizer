@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="resultspage">
+
+   <div class="container table-responsive result p-3 mb-3 mt-3">
+      <table class="table table-light mb-0">
+
+          {% for data_list in list_news_dictionaries %}
+          <tbody>
+            <tr>
+               <td class="col1">Title</td>
+               <td class="col2"><a href="{{ data_list['url'] }}" target="_blank">{{ data_list['title'] }}</a></td>
+            </tr>
+
+            <tr>
+               <td>Published date</td>
+               <td>{{ data_list['date'] }}</td>
+            </tr>
+
+            <tr>
+               <td>Author</td>
+               <td>{{ data_list['author'] }}</td>
+            </tr>
+
+            <tr>
+               <td>Main image</td>
+               <td><img id="crop" src="{{ data_list['url_image'] }}"></td>
+            </tr>
+
+            <tr>
+               <td>Summary</td>
+               <td>{{ data_list['summary'] }}</td>
+            </tr>
+
+            <tr>
+               <td>Keywords</td>
+               <td>{{ data_list['key_words'] }}</td>
+            </tr>
+          </tbody>
+
+          {% endfor %}
+
+
+      </table>
+   </div>
+</div>
+{% endblock %}
