@@ -3,7 +3,7 @@ from GoogleNews import GoogleNews
 from newsapi import NewsApiClient
 from utils.logging import get_log_object
 from utils.get_credentials import get_api_news_credential
-from newspaper import Article
+from utils.process_url import ContentFromURL
 from datetime import date, timedelta
 from forms import UrlSearchForm
 import sys
@@ -36,7 +36,7 @@ def index():
 
     # to display results (POST)
     if request.method == "POST":
-        
+
         try:
             results_from_req = search_results(url_search)
             log.info('Returning results of the request')
@@ -47,11 +47,10 @@ def index():
                 "Unable to process request. This event has been logged and it will be tackled in next release"
             )
             log.info('It was not possible to process this URL=%s', url_search.data['search'])
-    return render_template("index.html", form = url_search, errors = errors)
+    return render_template("index.html", form=url_search, errors=errors)
 
 
 def search_results(input_):
-
     url_search_news = UrlSearchForm(request.form)
     search_string = url_search_news.data['search']
     log.info('String to be processed=%s', search_string)
@@ -62,12 +61,36 @@ def search_results(input_):
 
     # if string provided is candidate to be a URL...
     if search_string[:4] == 'http':
+        # initialize list of dictionaries
+        list_news_dictionaries = []
         log.info('Candidate to URL has be provided directly...')
         url_search_news = UrlSearchForm(request.form)
         search_url = url_search_news.data['search']
+        log.info('Final URL searched=%s', search_url)
+        # extract information from URL
+        #
         log.info('URL to be processed=%s', search_url)
+        article_obj = ContentFromURL(search_url)
+        # get attributes from kth class
+        title_ = article_obj.article_title()
+        log.info('Article title=%s', title_)
+        date_ = article_obj.article_date()
+        log.info('Date article=%s', str(date_))
+        summary_ = article_obj.article_summary()
+        log.info('Summary=%s', summary_)
+        author_ = article_obj.article_author()
+        log.info('Author=%s', author_)
+        url_image_ = article_obj.url_top_image()
+        log.info('URL image=%s', url_image_)
+        key_words_ = article_obj.article_keywords()
+        log.info('Key words=%s', str(key_words_))
+        dict_aux = {'url': search_url, 'title': title_, 'date': date_, 'author': author_,
+                    'url_image': url_image_, 'summary': summary_, 'key_words': key_words_}
+        list_news_dictionaries.append(dict_aux)
 
     else:
+        # initialize list of dictionaries
+        list_news_dictionaries = []
         log.info('An open string has been provided in the search bar...')
         try:
             all_articles = newsapi_val.get_everything(q=search_string,
@@ -89,13 +112,35 @@ def search_results(input_):
             # get total number of articles found
             tot_num_articles = len(all_articles['articles'])
             log.info('Total number of articles found=%i based on search=%s', tot_num_articles, search_string)
-            # if at least one article was found...
-            if tot_num_articles >= 1:
-                search_url = all_articles['articles'][0]['url']
+            # if call successful and at least one article was found...
+            if (all_articles['status'] == 'ok') & (tot_num_articles >= 1):
+                # get top 5 news
+                top_n_news = all_articles['articles'][:5]
+                # log info about URLs
                 log.info('Query requested=%s', search_string)
-                log.info('URL from NewsAPI=%s', search_url)
-                # replace search_url with search_string
-                search_string = search_url
+                # initialize list of dictionaries
+                list_news_dictionaries = []
+                for k, news_ in zip(range(len(top_n_news)), top_n_news):
+                    kth_url = news_['url']
+                    log.info('URL number=%i from NewsAPI=%s', k+1, kth_url)
+                    kth_article_obj = ContentFromURL(kth_url)
+                    # get attributes from kth class
+                    title_ = kth_article_obj.article_title()
+                    log.info('Article title=%s', title_)
+                    date_ = kth_article_obj.article_date()
+                    log.info('Date article=%s', str(date_))
+                    summary_ = kth_article_obj.article_summary()
+                    log.info('Summary=%s', summary_)
+                    author_ = kth_article_obj.article_author()
+                    log.info('Author=%s', author_)
+                    url_image_ = kth_article_obj.url_top_image()
+                    log.info('URL image=%s', url_image_)
+                    key_words_ = kth_article_obj.article_keywords()
+                    log.info('Key words=%s', str(key_words_))
+                    dict_aux = {'url': kth_url, 'title': title_, 'date': date_, 'author': author_,
+                                'url_image': url_image_, 'summary': summary_, 'key_words': key_words_}
+                    list_news_dictionaries.append(dict_aux)
+                    log.info("==============================================================================")
 
             else:
                 log.info('Not relevant result were found from the query %s= ', search_string)
@@ -105,63 +150,8 @@ def search_results(input_):
             log.info('requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid')
             log.info('plan if you need more requests.')
 
-    log.info('Final URL searched=%s', search_url)
-    # instantiate Article object
-    log.info('Instantiating Article object')
-    article = Article(search_url)
-    log.info('Article instantiated')
-
-    article.download()
-    log.info('Article downloaded')
-    article.parse()
-    log.info('Article parsed')
-    # nltk.download("punkt")
-    article.nlp()
-    log.info('Article processed via NLP method')
-
-    # getting URL to the image...
-    image_url = article.top_image
-    log.info('URL to image=%s', str(image_url))
-
-    # in case text of article is needed
-    # text_article = article.text
-
-    # get title of article
-    article_title = article.title
-    log.info('Article title=%s', article_title)
-
-    date_from_article_class = article.publish_date
-    log.info('Date from Article class=%s', date_from_article_class)
-    if not bool(date_from_article_class):
-        published_date = 'Not specified'
-        log.info('Published date was not originally specified in article - it has been replaced to Not Specified')
-    else:
-        published_date = date_from_article_class.strftime("%d %B %Y")
-
-    log.info('Published date=%s', published_date)
-
-    try:
-        # get author from article if possible...
-        author = article.authors[0]
-
-    except:
-        # otherwise change it to Not specified
-        author = 'Not specified'
-
-    log.info('Author of article=%s', author)
-
-    # get article keywords and summary
-    keywords = article.keywords
-    log.info('Keywords gathered')
-    log.info('Keywords found=%s', str(keywords))
-
-    summary = article.summary
-    log.info('Summary of article obtained...')
-
     # render results
-    return render_template("results.html", search_string=search_string, title=article_title,
-                           published_date=published_date, author=author, image=image_url, keyword=keywords,
-                           summary=summary)
+    return render_template("results_all_news.html", list_news_dictionaries=list_news_dictionaries)
 
 
 if __name__ == '__main__':
