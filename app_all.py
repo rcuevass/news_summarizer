@@ -61,13 +61,36 @@ def search_results(input_):
 
     # if string provided is candidate to be a URL...
     if search_string[:4] == 'http':
+        # initialize list of dictionaries
+        list_news_dictionaries = []
         log.info('Candidate to URL has be provided directly...')
         url_search_news = UrlSearchForm(request.form)
         search_url = url_search_news.data['search']
-        log.info('URL to be processed=%s', search_url)
         log.info('Final URL searched=%s', search_url)
+        # extract information from URL
+        #
+        log.info('URL to be processed=%s', search_url)
+        article_obj = ContentFromURL(search_url)
+        # get attributes from kth class
+        title_ = article_obj.article_title()
+        log.info('Article title=%s', title_)
+        date_ = article_obj.article_date()
+        log.info('Date article=%s', str(date_))
+        summary_ = article_obj.article_summary()
+        log.info('Summary=%s', summary_)
+        author_ = article_obj.article_author()
+        log.info('Author=%s', author_)
+        url_image_ = article_obj.url_top_image()
+        log.info('URL image=%s', url_image_)
+        key_words_ = article_obj.article_keywords()
+        log.info('Key words=%s', str(key_words_))
+        dict_aux = {'url': search_url, 'title': title_, 'date': date_, 'author': author_,
+                    'url_image': url_image_, 'summary': summary_, 'key_words': key_words_}
+        list_news_dictionaries.append(dict_aux)
 
     else:
+        # initialize list of dictionaries
+        list_news_dictionaries = []
         log.info('An open string has been provided in the search bar...')
         try:
             all_articles = newsapi_val.get_everything(q=search_string,
@@ -119,11 +142,6 @@ def search_results(input_):
                     list_news_dictionaries.append(dict_aux)
                     log.info("==============================================================================")
 
-
-                # replace search_url with search_string
-                # list_search_string = top_5_news
-
-
             else:
                 log.info('Not relevant result were found from the query %s= ', search_string)
 
@@ -132,10 +150,8 @@ def search_results(input_):
             log.info('requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid')
             log.info('plan if you need more requests.')
 
-
     # render results
-    return render_template("results_all_news.html",
-                           list_news_dictionaries=list_news_dictionaries)
+    return render_template("results_all_news.html", list_news_dictionaries=list_news_dictionaries)
 
 
 if __name__ == '__main__':
