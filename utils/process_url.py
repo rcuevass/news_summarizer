@@ -1,4 +1,5 @@
 from newspaper import Article
+from textblob import TextBlob
 from logging import getLogger
 
 log_url = getLogger()
@@ -6,7 +7,9 @@ log_url = getLogger()
 
 class ContentFromURL:
     def __init__(self, url_str: str, image_url: str = None, article_title_text: str = None,
-                 article_date_=None, author_: str = None, keywords_: list = None, summary_: str = None):
+                 article_date_=None, author_: str = None, keywords_: list = None,
+                 summary_: str = None,
+                 sentiment_value: float = None):
         # initialize values
         self.url_str = url_str
         self.image_url = image_url
@@ -15,6 +18,7 @@ class ContentFromURL:
         self.author_ = author_
         self.keywords_ = keywords_
         self.summary_ = summary_
+        self.sentiment_value = sentiment_value
 
         log_url.info('Instantiating Article object')
         self.article = Article(self.url_str)
@@ -57,7 +61,7 @@ class ContentFromURL:
 
         return self.article_date_
 
-    def article_author(self):
+    def article_author(self) -> str:
         try:
             # get author from article if possible...
             self.author_ = self.article.authors[0]
@@ -68,14 +72,23 @@ class ContentFromURL:
 
         return self.author_
 
-    def article_keywords(self):
+    def article_keywords(self) -> list:
         # get article keywords and summary
         self.keywords_ = self.article.keywords
         log_url.info('Keywords gathered')
         log_url.info('Keywords found=%s', str(self.keywords_))
         return self.keywords_
 
-    def article_summary(self):
+    def article_summary(self) -> str:
         self.summary_ = self.article.summary
         log_url.info('Summary obtained')
         return self.summary_
+
+    def summary_sentiment(self) -> tuple:
+        self.sentiment_value = TextBlob(self.summary_).sentiment.polarity
+        if self.sentiment_value > 0:
+            return 'Positive', round(self.sentiment_value, 2)
+        elif self.sentiment_value < 0:
+            return 'Negative', round(self.sentiment_value, 2)
+        else:
+            return 'Neutral', round(self.sentiment_value, 2)

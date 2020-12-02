@@ -80,3 +80,11 @@ Here are some links to test the app against:
 - https://techcrunch.com/2020/11/17/amazon-launches-amazon-pharmacy-its-delivery-service-for-prescription-medications/
 
 - https://www.bbc.com/news/technology-55044568
+
+## Tools to incorporate sentiment analysis on news
+
+- http://nlp.town/blog/off-the-shelf-sentiment-analysis/
+
+- https://medium.com/@b.terryjack/nlp-pre-trained-sentiment-analysis-1eb52a9d742c)
+
+- [**Pre-trained sentiment analysis**](https://medium.com/@b.terryjack/nlp-pre-trained-sentiment-analysis-1eb52a9d742c)

@@ -84,8 +84,11 @@ def search_results(input_):
         log.info('URL image=%s', url_image_)
         key_words_ = article_obj.article_keywords()
         log.info('Key words=%s', str(key_words_))
+        summary_sentiment_value = article_obj.summary_sentiment()
+        log.info('Summary sentiment=%s', str(summary_sentiment_value))
         dict_aux = {'url': search_url, 'title': title_, 'date': date_, 'author': author_,
-                    'url_image': url_image_, 'summary': summary_, 'key_words': key_words_}
+                    'url_image': url_image_, 'summary': summary_, 'sentiment': summary_sentiment_value[1],
+                    'key_words': key_words_}
         list_news_dictionaries.append(dict_aux)
 
     else:
@@ -137,8 +140,12 @@ def search_results(input_):
                     log.info('URL image=%s', url_image_)
                     key_words_ = kth_article_obj.article_keywords()
                     log.info('Key words=%s', str(key_words_))
+                    summary_sentiment_value = kth_article_obj.summary_sentiment()
+                    log.info('Summary sentiment=%s', str(summary_sentiment_value))
+
                     dict_aux = {'url': kth_url, 'title': title_, 'date': date_, 'author': author_,
-                                'url_image': url_image_, 'summary': summary_, 'key_words': key_words_}
+                                'url_image': url_image_, 'summary': summary_, 'sentiment': summary_sentiment_value[1],
+                                'key_words': key_words_}
                     list_news_dictionaries.append(dict_aux)
                     log.info("==============================================================================")
 
