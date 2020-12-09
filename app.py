@@ -145,6 +145,7 @@ def search_results(input_):
 
                     dict_aux = {'url': kth_url, 'title': title_, 'date': date_, 'author': author_,
                                 'url_image': url_image_, 'summary': summary_, 'sentiment': summary_sentiment_value[1],
+                                'subjectivity': summary_sentiment_value[2],
                                 'key_words': key_words_}
                     list_news_dictionaries.append(dict_aux)
                     log.info("==============================================================================")

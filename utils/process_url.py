@@ -9,7 +9,9 @@ class ContentFromURL:
     def __init__(self, url_str: str, image_url: str = None, article_title_text: str = None,
                  article_date_=None, author_: str = None, keywords_: list = None,
                  summary_: str = None,
-                 sentiment_value: float = None):
+                 sentiment_value: float = None,
+                 sentiment_subjectivity: float = None):
+
         # initialize values
         self.url_str = url_str
         self.image_url = image_url
@@ -19,6 +21,7 @@ class ContentFromURL:
         self.keywords_ = keywords_
         self.summary_ = summary_
         self.sentiment_value = sentiment_value
+        self.sentiment_subjectivity = sentiment_subjectivity
 
         log_url.info('Instantiating Article object')
         self.article = Article(self.url_str)
@@ -85,10 +88,12 @@ class ContentFromURL:
         return self.summary_
 
     def summary_sentiment(self) -> tuple:
-        self.sentiment_value = TextBlob(self.summary_).sentiment.polarity
+        sentiment_subjectivity = TextBlob(self.summary_).sentiment
+        self.sentiment_value = sentiment_subjectivity.polarity
+        self.sentiment_subjectivity = sentiment_subjectivity.subjectivity
         if self.sentiment_value > 0:
-            return 'Positive', round(self.sentiment_value, 2)
+            return 'Positive', round(self.sentiment_value, 2), round(self.sentiment_subjectivity, 2)
         elif self.sentiment_value < 0:
-            return 'Negative', round(self.sentiment_value, 2)
+            return 'Negative', round(self.sentiment_value, 2), round(self.sentiment_subjectivity, 2)
         else:
-            return 'Neutral', round(self.sentiment_value, 2)
+            return 'Neutral', round(self.sentiment_value, 2), round(self.sentiment_subjectivity, 2)
