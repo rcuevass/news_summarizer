@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h6>Provide URL link of a news article to extract the news data summary:</h6>
+<h5>Simple app to showcase news summarization</h5>
+<h6>This tool should be considered a PoC - Enhancements may be required</h6>
 
 {% from "_formhelpers.html" import render_field %}
 <form method="post" action=''>
@@ -10,12 +11,12 @@
         <p>
             {{ render_field(form.search) }}
     </dl>
-    </p><input name="urllink" class="btn btn-primary btn-lg" type=submit value="Summarize!">
+    </p><input name="urllink" class="btn btn-primary btn-lg" type=submit value="Process">
 </form>
 <br>
 
 {% for error in errors %}
-<h3 class="errormsg">{{ error }}</h3>
+<h7 class="errormsg">{{ error }}</h7>
 {% endfor %}
 
 {% endblock %}
