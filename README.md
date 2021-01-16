@@ -61,18 +61,6 @@ conda/virtual environment: `pip freeze -l > requirements.txt`
 remote (Heroku) branch and test is your current local branch. Upon completion you should be able to see your app
 working.
 
-9. In case you want to create multiple versions of the app in Heroku, you can do so by doing the following:
-
-     - Create a new app in Heroku as you did before (step 6): `heroku create app-name-version`
-     
-     - Create a new remote branch in Heroku: `git remote add app-version-name GIT_URL`. GIT_URL with the Git URL that you
-     can find in the settings page of my-app-prod in heroku
-     
-     - Deploy model: `git push app-version-name test:master`. This is just like step 8 above.
-     E.g: If `dev` is current local branch ->  `git push alpha-heroku dev:master`
-     
-     - _Extra_. This [stackoverflow thread](https://stackoverflow.com/questions/18264621/how-do-i-push-different-branches-to-different-heroku-apps) discusses this situation in depth.
-
 ## Generals
 
 Here are some links to test the app against:
@@ -80,11 +68,3 @@ Here are some links to test the app against:
 - https://techcrunch.com/2020/11/17/amazon-launches-amazon-pharmacy-its-delivery-service-for-prescription-medications/
 
 - https://www.bbc.com/news/technology-55044568
-
-## Tools to incorporate sentiment analysis on news
-
-- http://nlp.town/blog/off-the-shelf-sentiment-analysis/
-
-- https://medium.com/@b.terryjack/nlp-pre-trained-sentiment-analysis-1eb52a9d742c)
-
-- [**Pre-trained sentiment analysis**](https://medium.com/@b.terryjack/nlp-pre-trained-sentiment-analysis-1eb52a9d742c)
